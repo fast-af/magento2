@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="product.info.form.content">
+            <block class="Magento\Catalog\Block\Adminhtml\Product\Edit" name="product.info.fastcheckout"
+                template="Fast_Checkout::product/view/simpleandvirtualpdpfastbutton.phtml" after="product.info.addtocart">
+                <arguments>
+                    <argument name="view_model" xsi:type="object">Fast\Checkout\ViewModel\CheckoutButton</argument>
+                </arguments>
+            </block>
+        </referenceBlock>
+    </body>
+</page>

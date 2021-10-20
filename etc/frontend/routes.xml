@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Fast_Checkout
+ *
+ * @package   Fast_Checkout
+ * @author    Borngroup <support@borngroup.com>
+ * @copyright 2021 Copyright BORN Commerce Pvt Ltd, https://www.borngroup.com/
+ * @license   https://www.borngroup.com/ Borngroup
+ * @link      https://www.fast.co/
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="standard">
+        <route id="fast" frontName="fast">
+            <module name="Fast_Checkout"/>
+        </route>
+    </router>
+</config>

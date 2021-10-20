@@ -1,0 +1,35 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/**
+ * @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit
+ * @var $viewModel \Fast\Checkout\ViewModel\CheckoutButton
+ */
+?>
+<?php
+$viewModel = $block->getViewModel();
+$_product = $block->getProduct();
+$_productId = $block->getProductId();
+$_appId = $viewModel->getFastAppId();
+$disabled = $_product->isSaleable() ? '' : 'disabled';
+$_btnTheme = $viewModel->useDarkTheme() ? 'dark' : '';
+if ($viewModel->isFastEnabled() && !$_product->getHideFastCheckout() && $product->isSaleable()) : ?>
+    <div class="fast-button-wrapper">
+        <fast-checkout-button id="fast-button"
+            <?= /* @noEscape */
+            $product->isSaleable() ? '' : 'disabled' ?>
+            <?= /* @noEscape */
+            $viewModel->useDarkTheme() ? 'dark' : '' ?>
+        ></fast-checkout-button>
+        <span class="fast-or-text"><?= $block->escapeHtml(__('OR')) ?></span>
+    </div>
+<?php endif; ?>
+
+<script type="text/x-magento-init">
+            {
+                "*": { "fastCheckout": {} }
+            }
+</script>
