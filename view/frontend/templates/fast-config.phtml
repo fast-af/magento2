@@ -24,7 +24,8 @@ $viewModel = $block->getViewModel();
             "coupon": "<?= /** @noEscape */ $viewModel->getCustomerCartDiscount() ?>",
             "buttonTheme": "<?= /** @noEscape */ $viewModel->useDarkTheme() ? 'dark' : '' ?>",
             "clearCartUrl": "<?= /** @noEscape */ $viewModel->getClearCartUrl() ?>",
-            "areAllProductsFast": <?= $viewModel->areAllProductsFast() ? 'true' : 'false' ?>
+            "areAllProductsFast": <?= $viewModel->areAllProductsFast() ? 'true' : 'false' ?>,
+            "isProductFast": <?= $viewModel->isFastProduct() ? 'true' : 'false' ?>
         }
     }
 }

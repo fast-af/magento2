@@ -1,3 +1,7 @@
+10/20/21 1.1.0.6
+create uicomponent/jsLayout for PDP
+move fast button into uicomponent on PDPs
+
 10/19/21 1.1.0.5
 fix swagger
 reduce number of times /check is called on cart updates
