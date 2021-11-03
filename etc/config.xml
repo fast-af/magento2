@@ -14,6 +14,7 @@
                 <retry_failures_cron>*/5 * * * *</retry_failures_cron>
                 <retry_failures_count>2</retry_failures_count>
                 <enable_auto_invoice>0</enable_auto_invoice>
+                <enable_rest_api_log>0</enable_rest_api_log>
             </fast>
          </fast_integration>
         <payment>

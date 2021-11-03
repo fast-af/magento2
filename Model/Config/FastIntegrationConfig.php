@@ -33,6 +33,7 @@ class FastIntegrationConfig
     const XPATH_FAST_PROD_JS_URL = 'fast_integration/fast/fast_prod_js_url';
     const XPATH_ENABLE_DARK_THEME = 'fast_integration/fast/enable_dark_theme';
     const XPATH_ENABLE_DEBUG_LOGGING = 'fast_integration/fast/enable_debug_logging';
+    const XPATH_ENABLE_REST_API_LOG = 'fast_integration/fast/enable_rest_api_log';
     const XPATH_RETRY_FAILURES_COUNT = 'fast_integration/fast/retry_failures_count';
     const XPATH_ENABLE_AUTH_CAPTURE = 'fast_integration/fast/enable_auth_capture';
     const XPATH_ORDER_STATUS_PLANNED_TO_SHIP = 'fast_integration/fast/order_status_planned_to_ship';
@@ -147,6 +148,14 @@ class FastIntegrationConfig
     public function isDebugLoggingEnabled(): bool
     {
         return $this->scopeConfig->isSetFlag(static::XPATH_ENABLE_DEBUG_LOGGING);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isRestApiLogEnabled(): bool
+    {
+        return $this->scopeConfig->isSetFlag(static::XPATH_ENABLE_REST_API_LOG);
     }
 
     /**

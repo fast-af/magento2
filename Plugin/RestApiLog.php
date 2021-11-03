@@ -17,6 +17,7 @@ namespace Fast\Checkout\Plugin;
 
 use Exception;
 use Fast\Checkout\Api\RestApiLogRepositoryInterface as RestApiLogRepository;
+use Fast\Checkout\Model\Config\FastIntegrationConfig;
 use Fast\Checkout\Model\RestApiLogFactory;
 use Magento\Framework\App\RequestInterface;
 use Magento\Webapi\Controller\Rest;
@@ -39,6 +40,11 @@ class RestApiLog
     protected $restApiLogFactory;
 
     /**
+     * @var FastIntegrationConfig
+     */
+    protected $fastIntegrationConfig;
+
+    /**
      * @var LoggerInterface
      */
     protected $logger;
@@ -46,15 +52,18 @@ class RestApiLog
     /**
      * RestApiLog constructor.
      * @param RestApiLogRepository $restApiLogRepository
+     * @param FastIntegrationConfig $fastIntegrationConfig
      * @param RestApiLogFactory $restApiLogFactory
      */
     public function __construct(
         RestApiLogRepository $restApiLogRepository,
         RestApiLogFactory $restApiLogFactory,
+        FastIntegrationConfig $fastIntegrationConfig,
         LoggerInterface $logger
     ) {
         $this->restApiLogRepository = $restApiLogRepository;
         $this->restApiLogFactory = $restApiLogFactory;
+        $this->fastIntegrationConfig = $fastIntegrationConfig;
         $this->logger = $logger;
     }
 
@@ -71,16 +80,18 @@ class RestApiLog
         RequestInterface $request
     ) {
 
-        $restApiLog = $this->restApiLogFactory->create();
-        $restApiLog->setSource($request->getClientIp());
-        $restApiLog->setMethod($request->getMethod());
-        $restApiLog->setPath($request->getPathInfo());
-        $restApiLog->setContent($request->getContent());
-        try {
-            //FIX - deprecated
-            $restApiLog->getResource()->save($restApiLog);
-        } catch (Exception $e) {
-            $this->logger->error('in Plugin/RestApiLog could not save log record to table ' . $e->getMessage());
+        if ($this->fastIntegrationConfig->isRestApiLogEnabled()) {
+            $restApiLog = $this->restApiLogFactory->create();
+            $restApiLog->setSource($request->getClientIp());
+            $restApiLog->setMethod($request->getMethod());
+            $restApiLog->setPath($request->getPathInfo());
+            $restApiLog->setContent($request->getContent());
+            try {
+                //FIX - deprecated
+                $restApiLog->getResource()->save($restApiLog);
+            } catch (Exception $e) {
+                $this->logger->error('in Plugin/RestApiLog could not save log record to table ' . $e->getMessage());
+            }
         }
 
         return null;
