@@ -65,7 +65,8 @@ class StatusOnCapture
 
         if ($this->fastConfig->isEnabled()
             && $order->getData('fast_order_id')
-            && $order->getState() == Order::STATE_PROCESSING) {
+            && $order->getState() == Order::STATE_PROCESSING
+            && $order->getPayment()->getAdditionalInformation("method_title") === 'fast') {
             $state = Order::STATE_PROCESSING;
             $status = $this->fastConfig->getInvoicedOrderStatus();
             $order->setState($state);

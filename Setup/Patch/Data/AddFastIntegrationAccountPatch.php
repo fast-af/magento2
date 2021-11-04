@@ -68,7 +68,6 @@ class AddFastIntegrationAccountPatch implements DataPatchInterface
         $this->oAuthService = $oAuthService;
         $this->integrationFactory = $integrationFactory;
         $this->logger = $logger;
-        $this->logger->info('in the thing');
     }
 
     /**
