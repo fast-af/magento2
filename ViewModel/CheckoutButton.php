@@ -289,4 +289,9 @@ class CheckoutButton implements ArgumentInterface
         }
         return true;
     }
+
+    public function getCustomerCartDiscount() {
+        $quote = $this->quoteRepository->get($this->getQuoteId());
+        return $quote->getCouponCode();
+    }
 }
