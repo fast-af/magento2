@@ -197,9 +197,4 @@ class AddFastIntegrationAccountPatch implements DataPatchInterface
     {
         return static::ALIASES;
     }
-
-    public function getCustomerCartDiscount() {
-        $quote = $this->quoteRepository->get($this->getQuoteId());
-        return $quote->getCouponCode();
-    }
 }
