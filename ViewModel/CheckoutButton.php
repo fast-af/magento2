@@ -55,6 +55,11 @@ class CheckoutButton implements ArgumentInterface
     protected $fastCheckoutHelper;
 
     /**
+     * @var Context
+     */
+    protected $httpContext;
+
+    /**
      * @var CheckoutSession
      */
     protected $checkoutSession;
@@ -94,6 +99,7 @@ class CheckoutButton implements ArgumentInterface
      * CheckoutButton constructor.
      * @param FastIntegrationConfig $fastIntegrationConfig
      * @param FastCheckoutHelper $fastCheckoutHelper
+     * @param Context $httpContext
      * @param CheckoutSession $checkoutSession
      * @param CustomerSession $customerSession
      * @param QuoteIdMaskFactory $quoteIdMaskFactory
@@ -108,6 +114,7 @@ class CheckoutButton implements ArgumentInterface
     public function __construct(
         FastIntegrationConfig $fastIntegrationConfig,
         FastCheckoutHelper $fastCheckoutHelper,
+        Context $httpContext,
         CheckoutSession $checkoutSession,
         CustomerSession $customerSession,
         QuoteIdMaskFactory $quoteIdMaskFactory,
@@ -120,6 +127,7 @@ class CheckoutButton implements ArgumentInterface
     ) {
         $this->fastIntegrationConfig = $fastIntegrationConfig;
         $this->fastCheckoutHelper = $fastCheckoutHelper;
+        $this->httpContext = $httpContext;
         $this->checkoutSession = $checkoutSession;
         $this->customerSession = $customerSession;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
@@ -181,6 +189,54 @@ class CheckoutButton implements ArgumentInterface
     public function getFastJsUrl()
     {
         return $this->fastIntegrationConfig->getFastJsUrl();
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getCartId()
+    {
+        return $this->httpContext->getValue('customer_cart_id');
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getVisibleCartItems()
+    {
+        return $this->httpContext->getValue('customer_cart_items');
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getCustomerName()
+    {
+        return $this->httpContext->getValue('customer_name');
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getCustomerEmail()
+    {
+        return $this->httpContext->getValue('customer_email');
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getCustomerId()
+    {
+        return $this->httpContext->getValue('customer_id');
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getCustomerCartDiscount()
+    {
+        return $this->httpContext->getValue('customer_cart_coupon');
     }
 
     /**
@@ -288,10 +344,5 @@ class CheckoutButton implements ArgumentInterface
             }
         }
         return true;
-    }
-
-    public function getCustomerCartDiscount() {
-        $quote = $this->quoteRepository->get($this->getQuoteId());
-        return $quote->getCouponCode();
     }
 }

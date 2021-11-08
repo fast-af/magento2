@@ -1,6 +1,11 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <!-- plugin for HttpContext session data -->
+    <type name="Magento\Framework\App\Action\AbstractAction">
+        <plugin name="customer-session-data-to-context" type="Fast\Checkout\Plugin\CustomerSessionContext"
+                sortOrder="15"/>
+    </type>
     <!-- order/quote attributes -->
     <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
         <plugin name="fast_uuid_quote_to_order_item" type="Fast\Checkout\Plugin\Quote\FastUuidQuoteToOrderItem"/>

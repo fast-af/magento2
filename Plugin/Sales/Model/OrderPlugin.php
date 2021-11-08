@@ -88,9 +88,7 @@ class OrderPlugin
      */
     public function beforeCancel(Order $order) //phpcs:ignore
     {
-        if ($this->fastConfig->isEnabled()
-            && $order->getFastOrderId()
-            && $order->getPayment()->getAdditionalInformation("method_title") === 'fast') {
+        if ($this->fastConfig->isEnabled() && $order->getFastOrderId()) {
             $this->logger->debug("in beforeCancel order");
             $callback = $this->fastConfig->getFastApiUri() . static::FAST_ORDER_CANCEL_ENDPOINT;
             $callback = str_replace(':order_id.value', $order->getFastOrderId(), $callback);
