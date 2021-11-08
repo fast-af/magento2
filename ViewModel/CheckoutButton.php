@@ -184,6 +184,14 @@ class CheckoutButton implements ArgumentInterface
     }
 
     /**
+     * @return mixed|null
+     */
+    public function getCustomerCartDiscount() {
+        // TODO: Get coupon code from quote.
+        return '';
+    }
+
+    /**
      * @return string
      * @throws CouldNotSaveException The empty cart and quote could not be created.
      * @throws Exception
