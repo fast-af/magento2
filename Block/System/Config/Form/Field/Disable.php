@@ -1,4 +1,14 @@
 <?php
+/**
+ * class is used to disable editing of admin config fields
+ * usage:
+ * <field id="fast_prod_js_url" translate="label comment" sortOrder="46" type="text"
+ * showInDefault="1" showInWebsite="0" showInStore="0">
+ * <frontend_model>Fast\Checkout\Block\System\Config\Form\Field\Disable</frontend_model>
+ * <label>Fast PROD JS URL</label>
+ * <comment>no trailing slash</comment>
+ * </field>
+ */
 
 namespace Fast\Checkout\Block\System\Config\Form\Field;
 
