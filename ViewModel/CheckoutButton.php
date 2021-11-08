@@ -188,14 +188,16 @@ class CheckoutButton implements ArgumentInterface
      */
     public function getCustomerCartDiscount()
     {
-        if ($this->getQuoteId() !== null) {
-            $quote = $this->quoteRepository->get($this->getQuoteId());
+        $couponCode = 'no-code';
+        $quoteId = $this->getQuoteId();
+        if (! empty($quoteId)) {
+            $quote = $this->quoteRepository->get($quoteId);
 
-            if ($quote !== null) {
-                return $quote->getCouponCode();
+            if (! empty($quote)) {
+                $couponCode = $quote->getCouponCode();
             }
         }
-        return '';
+        return $couponCode;
     }
 
     /**
