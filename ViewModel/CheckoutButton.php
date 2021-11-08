@@ -195,7 +195,7 @@ class CheckoutButton implements ArgumentInterface
                 return $quote->getCouponCode();
             }
         }
-        return;
+        return '';
     }
 
     /**
