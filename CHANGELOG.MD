@@ -1,13 +1,6 @@
-11/04/21 1.1.0.7
-update to http context to improve cache
-fix switch on api logging
-remove stray comment
-
 10/20/21 1.1.0.6
 create uicomponent/jsLayout for PDP
 move fast button into uicomponent on PDPs
-css update for dark theme
-resize fast button on pdp
 
 10/19/21 1.1.0.5
 fix swagger
