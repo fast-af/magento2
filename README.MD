@@ -1,4 +1,4 @@
-#Installation
+# Installation
 using composer, in your magento webroot, issue the following commands: 
 
 ```
@@ -17,7 +17,7 @@ php bin/magento setup:di:compile
 php bin/magento setup:static-content:deploy
 ```
 
-#Configuration
+# Configuration
 1. Navigate to Stores → Configuration
 2. Navigate to Services → Fast Checkout
 
@@ -38,9 +38,9 @@ php bin/magento setup:static-content:deploy
 4. Enable = Yes
 5. Save Config
 
-#Payment Method
+# Payment Method
 The fast extension will create a new payment method in the magento backend. Orders placed with the fast buttons will show this as their payment method. Customer/Admin placed orders cannot select this payment method.
 
-#Integration
+# Integration
 The fast extension will create an integration account for connecting the fast server to the magento store API.  
 If you reauthorize this integration, you will need to Activate again.
