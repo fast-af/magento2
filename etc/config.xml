@@ -9,7 +9,7 @@
                 <order_status_planned_to_ship>pending</order_status_planned_to_ship>
                 <fast_test_api_uri>https://api.sandbox.fast.co/v1/</fast_test_api_uri>
                 <fast_test_js_url>https://js.sandbox.fast.co/fast.js</fast_test_js_url>
-                <fast_prod_api_uri>https://api.fast.co/V1/</fast_prod_api_uri>
+                <fast_prod_api_uri>https://api.fast.co/v1/</fast_prod_api_uri>
                 <fast_prod_js_url>https://js.fast.co/fast.js</fast_prod_js_url>
                 <retry_failures_cron>*/5 * * * *</retry_failures_cron>
                 <retry_failures_count>2</retry_failures_count>
