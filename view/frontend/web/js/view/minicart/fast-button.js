@@ -61,31 +61,6 @@ define([
             return this;
         },
 
-        fastClickOld: function (data, e) {
-            // get updated serverConfig values
-            $.ajax({
-                url: '/fast/config/fast',
-                type: 'GET',
-                dataType: 'json',
-                success: function (data, textStatus, xhr) {
-                    var theme = data.theme;
-
-                    // Bail if Fast is not loaded
-                    if (typeof Fast !== 'function') {
-                        console.error('Fast not loaded, please reload the page and try again.');
-                        return false;
-                    }
-                    Fast.checkout({
-                        appId: data.appId,
-                        buttonId: e.target.id,
-                        cartId: data.cartId,
-                        theme: theme
-                    });
-                }
-            });
-            return true;
-        },
-
         fastClick: function (data, e) {
             function ajaxCall(callback){
                 $.ajax({
@@ -107,13 +82,12 @@ define([
                         console.error('Fast not loaded, please reload the page and try again.');
                         return false;
                     }
-                    Fast.checkout({
+                    return Fast.checkout({
                         appId: data.appId,
                         buttonId: e.target.id,
                         cartId: data.cartId,
                         theme: theme
                     });
-                    return true;
                 }else{
                     console.error('Config call failed');
                     return true;
