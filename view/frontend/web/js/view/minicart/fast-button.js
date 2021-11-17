@@ -60,7 +60,8 @@ define([
 
             return this;
         },
-        fastClick: function (data, e) {
+
+        fastClickOld: function (data, e) {
             // get updated serverConfig values
             $.ajax({
                 url: '/fast/config/fast',
@@ -84,6 +85,42 @@ define([
             });
             return true;
         },
+
+        fastClick: function (data, e) {
+            function ajaxCall(callback){
+                $.ajax({
+                    url: '/fast/config/fast',
+                    type: 'GET',
+                    dataType: 'json'                
+                }).done(function(data){
+                    callback(data);
+                }).fail(function(data){
+                    callback(null);
+                });
+            }
+            
+            ajaxCall(function(data){
+                if(data){
+                    var theme = data.theme;
+                    // Bail if Fast is not loaded
+                    if (typeof Fast !== 'function') {
+                        console.error('Fast not loaded, please reload the page and try again.');
+                        return false;
+                    }
+                    Fast.checkout({
+                        appId: data.appId,
+                        buttonId: e.target.id,
+                        cartId: data.cartId,
+                        theme: theme
+                    });
+                    return true;
+                }else{
+                    console.error('Config call failed');
+                    return true;
+                }
+            });
+        },
+
         fastDark: function () {
             return fastConfig.getBtnTheme() === 'dark';
         }
