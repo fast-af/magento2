@@ -90,7 +90,7 @@ class OrderPlugin
     {
         if ($this->fastConfig->isEnabled()
             && $order->getFastOrderId()
-            && $order->getPayment()->getAdditionalInformation("method_title") === 'fast') {
+            && $order->getPayment()->getMethod() === 'fast') {
             $this->logger->debug("in beforeCancel order");
             $callback = $this->fastConfig->getFastApiUri() . static::FAST_ORDER_CANCEL_ENDPOINT;
             $callback = str_replace(':order_id.value', $order->getFastOrderId(), $callback);
