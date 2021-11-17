@@ -23,12 +23,39 @@ define([
         observableProperties: [
             'items'
         ],
-        initialize: function () {
-            var self = this,
-                minicart = $('[data-block="minicart"]');
+        initialize: function () {            
+            var self = this,            
+                minicart = $('[data-block="minicart"]');                
             this._super();
+            self.cartId = ko.observable('');
+            self.fastAppId = ko.observable(fastConfig.getAppId());
             self.shouldShowFastButton = ko.observable(fastConfig.shouldShowFastOnCart());
-            self.fastDark = ko.observable(fastConfig.getBtnTheme());
+            self.fastDark = ko.observable(fastConfig.getBtnTheme() === 'dark');
+
+            function ajaxCall(callback){
+                $.ajax({
+                    url: '/fast/config/fast',
+                    type: 'GET',
+                    dataType: 'json'                
+                }).done(function(data){
+                    self.cartId(data.cartId);
+                    self.fastAppId(data.appId);
+                    self.fastDark(data.theme === 'dark');
+                    callback(data);
+                }).fail(function(data){
+                    callback(null);
+                });
+            };
+            if(!self.fastAppId()){
+                //initial cart id lookup on page load
+                ajaxCall(function(data){
+                    if(data){                    
+                    }else{
+                        console.error('Config call failed');
+                    }
+                });
+            }
+            
             customerData.get('cart').subscribe(
                 function (cartData) {
                     $.ajax({
@@ -46,7 +73,16 @@ define([
                         }
                     });
                     self.items(cartData.items);
-                }
+                },
+                //we also subscribe to cart updates to ensure
+                //cart id is up to date
+                ajaxCall(function(data){
+                    if(data){
+                        self.cartId(data.cartId);
+                    }else{
+                        console.error('Config call failed');
+                    }
+                })
             );
             this.items(customerData.get('cart')().items); //get cart items
             minicart.on('contentLoading', function () {
@@ -54,48 +90,28 @@ define([
                 self.fastDark(false);
             });
         },
+
         initObservable: function () {
             this._super();
             this.observe(this.observableProperties);
-
             return this;
         },
 
         fastClick: function (data, e) {
-            function ajaxCall(callback){
-                $.ajax({
-                    url: '/fast/config/fast',
-                    type: 'GET',
-                    dataType: 'json'                
-                }).done(function(data){
-                    callback(data);
-                }).fail(function(data){
-                    callback(null);
-                });
+            var self = this;
+            if (typeof Fast !== 'function') {
+                console.error('Fast not loaded, please reload the page and try again.');
+                return false;
             }
-            
-            ajaxCall(function(data){
-                if(data){
-                    var theme = data.theme;
-                    // Bail if Fast is not loaded
-                    if (typeof Fast !== 'function') {
-                        console.error('Fast not loaded, please reload the page and try again.');
-                        return false;
-                    }
-                    return Fast.checkout({
-                        appId: data.appId,
-                        buttonId: e.target.id,
-                        cartId: data.cartId,
-                        theme: theme
-                    });
-                }else{
-                    console.error('Config call failed');
-                    return true;
-                }
+            Fast.checkout({
+                appId: self.fastAppId(),
+                buttonId: e.target.id,
+                cartId: self.cartId(),
+                theme: self.fastDark()
             });
         },
 
-        fastDark: function () {
+        fastDarkFunc: function () {
             return fastConfig.getBtnTheme() === 'dark';
         }
     });
