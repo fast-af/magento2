@@ -46,7 +46,8 @@ define([
                     callback(null);
                 });
             };
-            if(!self.fastAppId() || !self.cartId()){
+            if((!self.fastAppId() || !self.cartId()) 
+                && customerData.get('cart')().items && customerData.get('cart')().items.length > 0){
                 //initial cart id lookup on page load
                 ajaxCall(function(data){
                     if(data == null){ 
@@ -57,6 +58,13 @@ define([
             
             customerData.get('cart').subscribe(
                 function (cartData) {
+                    //we also subscribe to cart updates to ensure
+                    //cart id is up to date
+                    ajaxCall(function(data){
+                        if(data === null){
+                            console.error('Config call failed');
+                        }
+                    })
                     $.ajax({
                         url: '/fast/cart/check',
                         type: 'GET',
@@ -72,14 +80,7 @@ define([
                         }
                     });
                     self.items(cartData.items);
-                },
-                //we also subscribe to cart updates to ensure
-                //cart id is up to date
-                ajaxCall(function(data){
-                    if(data === null){
-                        console.error('Config call failed');
-                    }
-                })
+                }
             );
             this.items(customerData.get('cart')().items); //get cart items
             minicart.on('contentLoading', function () {
