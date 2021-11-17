@@ -46,7 +46,7 @@ define([
                     callback(null);
                 });
             };
-            if(!self.fastAppId()){
+            if(!self.fastAppId() || !self.cartId()){
                 //initial cart id lookup on page load
                 ajaxCall(function(data){
                     if(data == null){ 
@@ -100,12 +100,17 @@ define([
                 console.error('Fast not loaded, please reload the page and try again.');
                 return false;
             }
-            Fast.checkout({
-                appId: self.fastAppId(),
-                buttonId: e.target.id,
-                cartId: self.cartId(),
-                theme: self.fastDark()
-            });
+
+            // it's possible that we got an error
+            // and not have cart or app id available
+            if(self.cartId() && self.fastAppId()){                
+                Fast.checkout({
+                    appId: self.fastAppId(),
+                    buttonId: e.target.id,
+                    cartId: self.cartId(),
+                    theme: self.fastDark()
+                });
+            }
         },
 
         fastDarkFunc: function () {
