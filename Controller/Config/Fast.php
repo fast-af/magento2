@@ -103,7 +103,18 @@ class Fast extends Action
         $quote = $this->checkoutSession->getQuote();
         $cartId = $this->getInvisibleCartFromCart($quote);
         $result = $this->resultJsonFactory->create();
+        $cartIsFast = true;
+        foreach ($quote ->getAllVisibleItems() as $cartItem) {
+            if ((int)$cartItem->getProduct()->getData('hide_fast_option') == 0) {
+                $cartIsFast = false;
+            }
+            if ($cartItem->getProductType() === 'bundle' ||
+                $cartItem->getProductType() === 'downloadable') {
+                $cartIsFast = false;
+            }
+        }
         return $result->setData([
+            'areAllProductsFast' => $cartIsFast,
             'success' => true,
             'appId' => $this->fastConfig->getAppId(),
             'cartId' => $cartId,
