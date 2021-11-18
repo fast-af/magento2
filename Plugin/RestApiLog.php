@@ -20,6 +20,7 @@ use Fast\Checkout\Api\RestApiLogRepositoryInterface as RestApiLogRepository;
 use Fast\Checkout\Model\Config\FastIntegrationConfig;
 use Fast\Checkout\Model\RestApiLogFactory;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\HTTP\Header;
 use Magento\Webapi\Controller\Rest;
 use Psr\Log\LoggerInterface;
 
@@ -45,6 +46,11 @@ class RestApiLog
     protected $fastIntegrationConfig;
 
     /**
+     * @var Magento\Framework\HTTP\Header
+     */
+    protected $httpHeader;
+
+    /**
      * @var LoggerInterface
      */
     protected $logger;
@@ -59,11 +65,13 @@ class RestApiLog
         RestApiLogRepository $restApiLogRepository,
         RestApiLogFactory $restApiLogFactory,
         FastIntegrationConfig $fastIntegrationConfig,
+        Header $httpHeader,
         LoggerInterface $logger
     ) {
         $this->restApiLogRepository = $restApiLogRepository;
         $this->restApiLogFactory = $restApiLogFactory;
         $this->fastIntegrationConfig = $fastIntegrationConfig;
+        $this->httpHeader = $httpHeader;
         $this->logger = $logger;
     }
 
@@ -80,7 +88,10 @@ class RestApiLog
         RequestInterface $request
     ) {
 
-        if ($this->fastIntegrationConfig->isRestApiLogEnabled()) {
+        if (
+            $this->fastIntegrationConfig->isRestApiLogEnabled()
+            && strpos((string) $this->httpHeader->getHttpUserAgent(), 'fastplatform') !== false
+        ) {
             $restApiLog = $this->restApiLogFactory->create();
             $restApiLog->setSource($request->getClientIp());
             $restApiLog->setMethod($request->getMethod());
