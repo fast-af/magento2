@@ -103,7 +103,7 @@ class InvoiceFastOrderWithCapture implements ObserverInterface
         if ($fastOrderId
             && $this->fastConfig->isEnabled()
             && !$this->fastConfig->isAuthCapture()
-            && $order->getPayment()->getAdditionalInformation("method_title") === 'fast') {
+            && $order->getPayment()->getMethod() === 'fast') {
             try {
                 $orderComment = sprintf(
                     __("Invoicing Fast order ID: %s"),
