@@ -41,30 +41,26 @@ define([
                     self.cartId(data.cartId);
                     self.fastAppId(data.appId);
                     self.fastDark(data.theme === 'dark');
-                    callback(data);
+                    if(typeof callback === 'function'){
+                        callback(data);
+                    }
                 }).fail(function(data){
-                    callback(null);
+                    if(typeof callback === 'function'){
+                        callback(null);
+                    }
                 });
             };
             if((!self.fastAppId() || !self.cartId()) 
                 && customerData.get('cart')().items && customerData.get('cart')().items.length > 0){
                 //initial cart id lookup on page load
-                ajaxCall(function(data){
-                    if(data == null){ 
-                        console.error('Config call failed');
-                    }
-                });
+                ajaxCall();
             }
             
             customerData.get('cart').subscribe(
                 function (cartData) {
                     //we also subscribe to cart updates to ensure
                     //cart id is up to date
-                    ajaxCall(function(data){
-                        if(data === null){
-                            console.error('Config call failed');
-                        }
-                    })
+                    ajaxCall();
                     $.ajax({
                         url: '/fast/cart/check',
                         type: 'GET',
