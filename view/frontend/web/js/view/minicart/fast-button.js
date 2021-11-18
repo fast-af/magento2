@@ -34,7 +34,7 @@ define([
 
             function ajaxCall(callback){
                 $.ajax({
-                    url: '/fast/cart/check',
+                    url: '/fast/config/fast',
                     type: 'GET',
                     dataType: 'json'
                 }).done(function(data){
