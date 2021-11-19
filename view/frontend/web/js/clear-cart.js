@@ -21,10 +21,5 @@ define([
             // Hit custom endpoint to clear the cart
             $.post(fastConfig.getClearCartUrl());
         }
-        // XXX Is this even needed, seems it might be supported already by Fast.js
-        else if(event.name === "Popup window closed") {
-            $.post(fastConfig.getClearCartUrl());
-            window.location.reload();
-        }
     });
 });
