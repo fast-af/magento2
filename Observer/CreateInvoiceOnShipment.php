@@ -100,7 +100,7 @@ class CreateInvoiceOnShipment implements ObserverInterface
         if ($this->fastConfig->isEnabled()
             && $this->fastConfig->isEnabledAutoInvoice()
             && $order->getData('fast_order_id')
-            && $order->getPayment()->getAdditionalInformation("method_title") === 'fast') {
+            && $order->getPayment()->getMethod() === 'fast') {
             try {
                 $this->fastCheckoutHelper->log("generating invoice for order: " . $order->getIncrementId() . " fast order id " . $order->getData('fast_order_id'));
 
