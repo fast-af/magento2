@@ -41,6 +41,7 @@ define([
                     self.cartId(data.cartId);
                     self.fastAppId(data.appId);
                     self.fastDark(data.theme === 'dark');
+                    self.shouldShowFastButton(data.areAllProductsFast);
                     if(typeof callback === 'function'){
                         callback(data);
                     }
@@ -61,20 +62,6 @@ define([
                     //we also subscribe to cart updates to ensure
                     //cart id is up to date
                     ajaxCall();
-                    $.ajax({
-                        url: '/fast/cart/check',
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function (data, textStatus, xhr) {
-                            self.shouldShowFastButton(data.areAllProductsFast);
-                            if (data.theme !== 'dark') {
-                                self.fastDark(false);
-                            }
-                            if (data.theme === 'dark') {
-                                self.fastDark(true);
-                            }
-                        }
-                    });
                     self.items(cartData.items);
                 }
             );
