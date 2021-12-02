@@ -11,7 +11,8 @@
 $viewModel = $block->getViewModel();
 if ($viewModel->isFastEnabled() && $viewModel->areAllProductsFast()) : ?>
     <div class="fast-button-wrapper">
-        <fast-checkout-button id="fast-button"
+        <fast-checkout-button id="fast-button" app_id="<?= /* @noEscape */
+        $viewModel->getFastAppId() ?>"
             <?= /* @noEscape */
             $viewModel->useDarkTheme() ? 'dark' : '' ?>
         ></fast-checkout-button>

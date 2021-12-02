@@ -51,6 +51,12 @@ use Monolog\Logger;
 class FastPayment extends AbstractMethod
 {
     const FAST_REFUND_ENDPOINT = 'external/orders/:order_id.value/refund';
+    const FAST_FRAUD_PENDING_STATUS = 'fast-fraud-pending';
+    const FAST_FRAUD_PENDING_LABEL = 'Fast Payment Review';
+    const FAST_FRAUD_FAILED_STATUS = 'fast-fraud-failed';
+    const FAST_FRAUD_FAILED_LABEL = 'Fast Fraud Check Failed';
+    const FAST_FRAUD_SUCCESS_STATUS = 'fast-fraud-success';
+    const FAST_FRAUD_SUCCESS_LABEL = 'Fast Fraud Check Passed';
     /**
      * @var string
      */
@@ -97,6 +103,13 @@ class FastPayment extends AbstractMethod
      * @var bool
      */
     protected $_canFetchTransactionInfo = true;
+
+    /**
+     * Payment Method feature
+     *
+     * @var bool
+     */
+    protected $_isInitializeNeeded = true;
 
     /**
      * @var FastCheckoutHelper
@@ -371,5 +384,28 @@ class FastPayment extends AbstractMethod
             }
         }
         return array_values($lines);
+    }
+
+    public function initialize($paymentAction, $stateObject)
+    {
+        switch ($paymentAction) {
+            case Config::PAYMENT_ACTION_AUTH:
+            case Config::PAYMENT_ACTION_SALE:
+                $payment = $this->getInfoInstance();
+                /** @var \Magento\Sales\Model\Order $order */
+                $order = $payment->getOrder();
+                $order->setCanSendNewEmailFlag(false);
+                $payment->setAmountAuthorized($order->getTotalDue());
+                $payment->setBaseAmountAuthorized($order->getBaseTotalDue());
+
+                $this->setPaymentFormUrl($payment);
+//this should be state and status payment review
+                $stateObject->setState(Order::STATE_PENDING_PAYMENT);
+                $stateObject->setStatus(Order::STATE_PENDING_PAYMENT);
+                $stateObject->setIsNotified(false);
+                break;
+            default:
+                break;
+        }
     }
 }
