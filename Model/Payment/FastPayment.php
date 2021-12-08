@@ -38,6 +38,7 @@ use Magento\Quote\Api\Data\CartInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Exception\CouldNotRefundException;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Monolog\Logger;
@@ -388,24 +389,15 @@ class FastPayment extends AbstractMethod
 
     public function initialize($paymentAction, $stateObject)
     {
-        switch ($paymentAction) {
-            case Config::PAYMENT_ACTION_AUTH:
-            case Config::PAYMENT_ACTION_SALE:
-                $payment = $this->getInfoInstance();
-                /** @var \Magento\Sales\Model\Order $order */
-                $order = $payment->getOrder();
-                $order->setCanSendNewEmailFlag(false);
-                $payment->setAmountAuthorized($order->getTotalDue());
-                $payment->setBaseAmountAuthorized($order->getBaseTotalDue());
-
-                $this->setPaymentFormUrl($payment);
-//this should be state and status payment review
-                $stateObject->setState(Order::STATE_PENDING_PAYMENT);
-                $stateObject->setStatus(Order::STATE_PENDING_PAYMENT);
-                $stateObject->setIsNotified(false);
-                break;
-            default:
-                break;
-        }
+        $payment = $this->getInfoInstance();
+        /** @var \Magento\Sales\Model\Order $order */
+        $order = $payment->getOrder();
+        $order->setCanSendNewEmailFlag(false);
+        $payment->setAmountAuthorized($order->getTotalDue());
+        $payment->setBaseAmountAuthorized($order->getBaseTotalDue());
+        $this->setPaymentFormUrl($payment);
+        $stateObject->setState(Order::STATE_PAYMENT_REVIEW);
+        $stateObject->setStatus(static::FAST_FRAUD_PENDING_STATUS);
+        $stateObject->setIsNotified(false);
     }
 }
