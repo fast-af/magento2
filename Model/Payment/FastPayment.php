@@ -400,4 +400,24 @@ class FastPayment extends AbstractMethod
         $stateObject->setStatus(static::FAST_FRAUD_PENDING_STATUS);
         $stateObject->setIsNotified(false);
     }
+
+    public function getConfigPaymentAction()
+    {
+        if ($this->fastConfig->isAuthCapture()) {
+            return \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE_CAPTURE;
+        }
+        return \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE;
+    }
+
+    public function getConfigData($field, $storeId = null)
+    {
+        if ('order_place_redirect_url' === $field) {
+            return $this->getOrderPlaceRedirectUrl();
+        }
+        if (null === $storeId) {
+            $storeId = $this->getStore();
+        }
+        $path = 'fast_integration/fast/' . $field;
+        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId);
+    }
 }

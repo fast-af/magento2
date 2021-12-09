@@ -37,6 +37,7 @@ class FastIntegrationConfig
     const XPATH_RETRY_FAILURES_COUNT = 'fast_integration/fast/retry_failures_count';
     const XPATH_ENABLE_AUTH_CAPTURE = 'fast_integration/fast/enable_auth_capture';
     const XPATH_ORDER_STATUS_PLANNED_TO_SHIP = 'fast_integration/fast/order_status_planned_to_ship';
+    const XPATH_ORDER_STATUS_AFTER_FRAUD = 'order_status_released_from_fraud';
     const XPATH_AUTO_INVOICE = 'fast_integration/fast/enable_auto_invoice';
 
 
@@ -101,6 +102,14 @@ class FastIntegrationConfig
     public function getInvoicedOrderStatus(): string
     {
         return $this->scopeConfig->getValue(static::XPATH_ORDER_STATUS_PLANNED_TO_SHIP);
+    }
+
+    /**
+     * @return string
+     */
+    public function getNewAfterFraudStatus(): string
+    {
+        return $this->scopeConfig->getValue(static::XPATH_ORDER_STATUS_AFTER_FRAUD);
     }
 
     /**
