@@ -104,6 +104,6 @@ class OrderRepository
                 $resultOrder->setState(Order::STATE_PROCESSING)->setStatus($orderStatus);
             }
         }
-        return $resultOrder;
+        //return $resultOrder;
     }
 }

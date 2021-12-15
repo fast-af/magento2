@@ -18,6 +18,9 @@
         <policy id="default-src">
             <values>
                 <value id="fast_default" type="host">api.fast.co</value>
+                <value id="fast_sandbox_connect" type="host">api.sandbox.fast.co</value>
+                <value id="fast_checkout_sandbox" type="host">checkout.sandbox.fast.co</value>
+                <value id="fast_checkout" type="host">checkout.fast.co</value>
             </values>
         </policy>
         <policy id="script-src">
