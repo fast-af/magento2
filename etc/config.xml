@@ -7,6 +7,7 @@
                 <enable_dark_theme>0</enable_dark_theme>
                 <enable_auth_capture>0</enable_auth_capture>
                 <order_status_planned_to_ship>pending</order_status_planned_to_ship>
+                <order_status_released_from_fraud>processing</order_status_released_from_fraud>
                 <fast_test_api_uri>https://api.sandbox.fast.co/v1/</fast_test_api_uri>
                 <fast_test_js_url>https://js.sandbox.fast.co/fast.js</fast_test_js_url>
                 <fast_prod_api_uri>https://api.fast.co/v1/</fast_prod_api_uri>
