@@ -147,8 +147,10 @@ class CheckoutButton implements ArgumentInterface
         $product = $this->registry->registry('product');
         if (
             $product !== null
-            && $product->getData('hide_fast_option') == 0
-            && ! $product->isSaleable()
+            && (
+                $product->getData('hide_fast_option') == 0
+                || !$product->isSaleable()
+            )
         ) {
             return false;
         }
