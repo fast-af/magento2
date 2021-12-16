@@ -38,6 +38,7 @@ use Magento\Quote\Api\Data\CartInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Exception\CouldNotRefundException;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order\Payment\Transaction;
 use Monolog\Logger;
@@ -51,6 +52,12 @@ use Monolog\Logger;
 class FastPayment extends AbstractMethod
 {
     const FAST_REFUND_ENDPOINT = 'external/orders/:order_id.value/refund';
+    const FAST_FRAUD_PENDING_STATUS = 'fast-fraud-pending';
+    const FAST_FRAUD_PENDING_LABEL = 'Fast Payment Review';
+    const FAST_FRAUD_FAILED_STATUS = 'fast-fraud-failed';
+    const FAST_FRAUD_FAILED_LABEL = 'Fast Fraud Check Failed';
+    const FAST_FRAUD_SUCCESS_STATUS = 'fast-fraud-success';
+    const FAST_FRAUD_SUCCESS_LABEL = 'Fast Fraud Check Passed';
     /**
      * @var string
      */
@@ -97,6 +104,13 @@ class FastPayment extends AbstractMethod
      * @var bool
      */
     protected $_canFetchTransactionInfo = true;
+
+    /**
+     * Payment Method feature
+     *
+     * @var bool
+     */
+    protected $_isInitializeNeeded = true;
 
     /**
      * @var FastCheckoutHelper
@@ -371,5 +385,39 @@ class FastPayment extends AbstractMethod
             }
         }
         return array_values($lines);
+    }
+
+    public function initialize($paymentAction, $stateObject)
+    {
+        $payment = $this->getInfoInstance();
+        /** @var \Magento\Sales\Model\Order $order */
+        $order = $payment->getOrder();
+        $order->setCanSendNewEmailFlag(false);
+        $payment->setAmountAuthorized($order->getTotalDue());
+        $payment->setBaseAmountAuthorized($order->getBaseTotalDue());
+        $this->setPaymentFormUrl($payment);
+        $stateObject->setState(Order::STATE_PAYMENT_REVIEW);
+        $stateObject->setStatus(static::FAST_FRAUD_PENDING_STATUS);
+        $stateObject->setIsNotified(false);
+    }
+
+    public function getConfigPaymentAction()
+    {
+        if ($this->fastConfig->isAuthCapture()) {
+            return \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE_CAPTURE;
+        }
+        return \Magento\Payment\Model\Method\AbstractMethod::ACTION_AUTHORIZE;
+    }
+
+    public function getConfigData($field, $storeId = null)
+    {
+        if ('order_place_redirect_url' === $field) {
+            return $this->getOrderPlaceRedirectUrl();
+        }
+        if (null === $storeId) {
+            $storeId = $this->getStore();
+        }
+        $path = 'fast_integration/fast/' . $field;
+        return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId);
     }
 }

@@ -38,6 +38,12 @@
                     <source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
                     <comment>Order Status for new Fast orders captured at point of sale</comment>
                 </field>
+                <field id="order_status_released_from_fraud" translate="label comment" type="select" sortOrder="6"
+                       showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Order Status After Payment Review</label>
+                    <source_model>Magento\Sales\Model\Config\Source\Order\Status\Processing</source_model>
+                    <comment>Order Status for new Fast orders after passing payment review</comment>
+                </field>
                 <field id="mode" translate="label comment" sortOrder="31" type="select" canRestore="1"
                        showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable Production Mode</label>

@@ -2,11 +2,14 @@
 
 namespace Fast\Checkout\Plugin\Api;
 
+use Fast\Checkout\Model\Config\FastIntegrationConfig;
+use Fast\Checkout\Model\Payment\FastPayment;
 use Magento\Sales\Api\Data\OrderExtensionFactory;
 use Magento\Sales\Api\Data\OrderExtensionInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderSearchResultInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
 
 /**
  * Class OrderRepository
@@ -21,15 +24,20 @@ class OrderRepository
      * @var OrderExtensionFactory
      */
     protected $extensionFactory;
+    protected $fastIntegrationConfig;
 
     /**
      * OrderRepositoryPlugin constructor
      *
      * @param OrderExtensionFactory $extensionFactory
+     * @param FastIntegrationConfig $fastIntegrationConfigConfig
      */
-    public function __construct(OrderExtensionFactory $extensionFactory)
-    {
+    public function __construct(
+        OrderExtensionFactory $extensionFactory,
+        FastIntegrationConfig $fastIntegrationConfig
+    ) {
         $this->extensionFactory = $extensionFactory;
+        $this->fastIntegrationConfig = $fastIntegrationConfig;
     }
 
     /**
@@ -42,11 +50,13 @@ class OrderRepository
      */
     public function afterGet(OrderRepositoryInterface $subject, OrderInterface $order)
     {
-        $fastOrderId = $order->getData(static::FAST_ORDER_ID);
-        $extensionAttributes = $order->getExtensionAttributes();
-        $extensionAttributes = $extensionAttributes ? $extensionAttributes : $this->extensionFactory->create();
-        $extensionAttributes->setFastOrderId($fastOrderId);
-        $order->setExtensionAttributes($extensionAttributes);
+        if ($this->fastIntegrationConfig->isEnabled()) {
+            $fastOrderId = $order->getData(static::FAST_ORDER_ID);
+            $extensionAttributes = $order->getExtensionAttributes();
+            $extensionAttributes = $extensionAttributes ? $extensionAttributes : $this->extensionFactory->create();
+            $extensionAttributes->setFastOrderId($fastOrderId);
+            $order->setExtensionAttributes($extensionAttributes);
+        }
 
         return $order;
     }
@@ -61,14 +71,16 @@ class OrderRepository
      */
     public function afterGetList(OrderRepositoryInterface $subject, OrderSearchResultInterface $searchResult)
     {
-        $orders = $searchResult->getItems();
+        if ($this->fastIntegrationConfig->isEnabled()) {
+            $orders = $searchResult->getItems();
 
-        foreach ($orders as &$order) {
-            $fastOrderId = $order->getData(static::FAST_ORDER_ID);
-            $extensionAttributes = $order->getExtensionAttributes();
-            $extensionAttributes = $extensionAttributes ? $extensionAttributes : $this->extensionFactory->create();
-            $extensionAttributes->setFastOrderId($fastOrderId);
-            $order->setExtensionAttributes($extensionAttributes);
+            foreach ($orders as &$order) {
+                $fastOrderId = $order->getData(static::FAST_ORDER_ID);
+                $extensionAttributes = $order->getExtensionAttributes();
+                $extensionAttributes = $extensionAttributes ? $extensionAttributes : $this->extensionFactory->create();
+                $extensionAttributes->setFastOrderId($fastOrderId);
+                $order->setExtensionAttributes($extensionAttributes);
+            }
         }
 
         return $searchResult;
@@ -77,12 +89,21 @@ class OrderRepository
     /**
      * @param OrderRepositoryInterface $subject
      * @param OrderInterface $resultOrder
+     *
+     * @return $resultOrder
      */
     public function beforeSave(OrderRepositoryInterface $subject, OrderInterface $resultOrder)
     {
-        foreach (['fast_order_id'] as $field) {
-            $value = $resultOrder->getData($field);
-            $resultOrder->setData($field, $value);
+        if ($this->fastIntegrationConfig->isEnabled()) {
+            foreach (['fast_order_id'] as $field) {
+                $value = $resultOrder->getData($field);
+                $resultOrder->setData($field, $value);
+            }
+            if ($resultOrder->getStatus() === FastPayment::FAST_FRAUD_SUCCESS_STATUS) {
+                $orderStatus = $this->fastIntegrationConfig->getNewAfterFraudStatus();
+                $resultOrder->setState(Order::STATE_PROCESSING)->setStatus($orderStatus);
+            }
         }
+        //return $resultOrder;
     }
 }

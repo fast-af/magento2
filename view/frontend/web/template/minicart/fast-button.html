@@ -2,7 +2,7 @@
 <div class="fast-button-wrapper">
     <fast-checkout-button
             data-bind="click: fastClick, attr: {'dark': fastDark}"
-            id="fast-button-minicart">
+            app_id="<?= /* @noEscape */ $viewModel->getFastAppId() ?>" id="fast-button-minicart">
     </fast-checkout-button>
     <span class="fast-or-text" translate="'OR'"/>
 </div>
