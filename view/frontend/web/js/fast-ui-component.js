@@ -1,5 +1,5 @@
-define(['uiComponent', 'jquery', 'ko', 'underscore', 'fastConfig'],
-    function(Component, $, ko, _, fastConfigFactory) {
+define(['uiComponent', 'jquery', 'ko', 'fastConfig'],
+    function(Component, $, ko, fastConfigFactory) {
         'use strict';
 
         var fastConfig = fastConfigFactory();
