@@ -1,5 +1,4 @@
 define([
-    'domReady!',
     'jquery',
 ], function ($) {
     var serverConfig = null;
