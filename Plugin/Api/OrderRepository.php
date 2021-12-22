@@ -109,7 +109,7 @@ class OrderRepository
                 $resultOrder->setData($field, $value);
             }
             if ($resultOrder->getStatus() === FastPayment::FAST_FRAUD_SUCCESS_STATUS) {
-                if ($this->fastIntegrationConfig->isAuthCapture() == MethodInterface::ACTION_AUTHORIZE_CAPTURE) {
+                if ($this->fastIntegrationConfig->isAuthCapture()) {
                     $this->createInvoice->doInvoice($resultOrder);
                 }
                 $orderStatus = $this->fastIntegrationConfig->getNewAfterFraudStatus();
