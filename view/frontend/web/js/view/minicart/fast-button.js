@@ -25,7 +25,7 @@ define([
             this._super();
             self.cartId = ko.observable('');
             self.fastAppId = ko.observable(self.fastConfig.getAppId());
-            self.shouldShowFastButton = ko.observable(self.fastConfig.shouldShowFastOnCart());
+            self.shouldShowFastButton = ko.observable(self.shouldShowFastButton());
             self.fastDark = ko.observable(self.isFastDarkTheme());
 
             if((!self.fastAppId() || !self.cartId()) 
@@ -93,5 +93,9 @@ define([
                 });
             }
         },
+
+        shouldShowFastButton: function() {
+            return self.fastConfig.shouldShowFastOnCart();
+        }
     });
 });
