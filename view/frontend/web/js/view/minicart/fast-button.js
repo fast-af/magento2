@@ -96,9 +96,5 @@ define([
                 });
             }
         },
-
-        fastDarkFunc: function () {
-            return fastConfig.getBtnTheme() === 'dark';
-        }
     });
 });
