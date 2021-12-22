@@ -1,11 +1,20 @@
-define(['fastUiComponent', 'jquery', 'ko', 'underscore', 'fastConfig'],
-    function(Component, $, ko, _, fastConfigFactory) {
+define(['fastButtonBase', 'jquery', 'ko', 'underscore'],
+    function(Component, $, ko, _) {
         'use strict';
-
-        var fastConfig = fastConfigFactory();
 
         return Component.extend({
 
+            initialize: function() {
+                var self = this;
+                this._super();
+                self.shouldShowFastButton = ko.observable(self.shouldShowFastButton());
+                $(document).ready(function () {
+                    $("#pdp-fast-button").css({
+                        'width': ($("#product-addtocart-button").outerWidth() + 'px')
+                    });
+                    $("#pdp-fast-button").prependTo(".box-tocart .fieldset .actions");
+                });
+            },
             pdpFastClick: function(data, e) {
 
                 // get the form node via jquery
@@ -56,7 +65,7 @@ define(['fastUiComponent', 'jquery', 'ko', 'underscore', 'fastConfig'],
                     }
                     // fast checkout
                     Fast.checkout({
-                        appId: fastConfig.getAppId(),
+                        appId: self.fastConfig.getAppId(),
                         buttonId: event.target.id,
                         products: productOptions
                     });
@@ -64,6 +73,6 @@ define(['fastUiComponent', 'jquery', 'ko', 'underscore', 'fastConfig'],
 
 
                 return true;
-            },
+            }
         });
     });

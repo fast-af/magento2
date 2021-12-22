@@ -1,10 +1,9 @@
 define([
-    'uiComponent',
+    'fastButtonBase',
     'Magento_Customer/js/customer-data',
     'jquery',
     'ko',
     'underscore',
-    'fastConfig',
     'clearCart'
 ], function (
     Component,
@@ -12,12 +11,9 @@ define([
     $,
     ko,
     _,
-    fastConfigFactory,
     fastCartCleanup
 ) {
     'use strict';
-
-    var fastConfig = fastConfigFactory();
 
     return Component.extend({
         observableProperties: [
@@ -28,40 +24,21 @@ define([
                 minicart = $('[data-block="minicart"]');
             this._super();
             self.cartId = ko.observable('');
-            self.fastAppId = ko.observable(fastConfig.getAppId());
-            self.shouldShowFastButton = ko.observable(fastConfig.shouldShowFastOnCart());
-            self.fastDark = ko.observable(fastConfig.getBtnTheme() === 'dark');
+            self.fastAppId = ko.observable(self.fastConfig.getAppId());
+            self.shouldShowFastButton = ko.observable(self.fastConfig.shouldShowFastOnCart());
+            self.fastDark = ko.observable(self.isFastDarkTheme());
 
-            function ajaxCall(callback){
-                $.ajax({
-                    url: '/fast/config/fast',
-                    type: 'GET',
-                    dataType: 'json'
-                }).done(function(data){
-                    self.cartId(data.cartId);
-                    self.fastAppId(data.appId);
-                    self.fastDark(data.theme === 'dark');
-                    self.shouldShowFastButton(data.areAllProductsFast);
-                    if(typeof callback === 'function'){
-                        callback(data);
-                    }
-                }).fail(function(data){
-                    if(typeof callback === 'function'){
-                        callback(null);
-                    }
-                });
-            };
             if((!self.fastAppId() || !self.cartId()) 
                 && customerData.get('cart')().items && customerData.get('cart')().items.length > 0){
                 //initial cart id lookup on page load
-                ajaxCall();
+                self.ajaxCall();
             }
             
             customerData.get('cart').subscribe(
                 function (cartData) {
                     //we also subscribe to cart updates to ensure
                     //cart id is up to date
-                    ajaxCall();
+                    self.ajaxCall();
                     self.items(cartData.items);
                 }
             );
@@ -69,6 +46,26 @@ define([
             minicart.on('contentLoading', function () {
                 self.shouldShowFastButton(false);
                 self.fastDark(false);
+            });
+        },
+
+        ajaxCall: function(callback){
+            $.ajax({
+                url: '/fast/config/fast',
+                type: 'GET',
+                dataType: 'json'
+            }).done(function(data){
+                self.cartId(data.cartId);
+                self.fastAppId(data.appId);
+                self.fastDark(data.theme === 'dark');
+                self.shouldShowFastButton(data.areAllProductsFast);
+                if(typeof callback === 'function'){
+                    callback(data);
+                }
+            }).fail(function(data){
+                if(typeof callback === 'function'){
+                    callback(null);
+                }
             });
         },
 
