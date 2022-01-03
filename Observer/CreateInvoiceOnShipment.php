@@ -19,6 +19,7 @@ use Fast\Checkout\Model\Config\FastIntegrationConfig as FastConfig;
 use Fast\Checkout\Service\CreateInvoice;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 
 /**
@@ -35,18 +36,25 @@ class CreateInvoiceOnShipment implements ObserverInterface
      * @var CreateInvoice
      */
     private $createInvoice;
+    /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
 
     /**
      * CreateInvoiceOnShipment constructor.
      * @param FastConfig $fastConfig
      * @param CreateInvoice $createInvoice
+     * @param OrderRepositoryInterface $orderRepository
      */
     public function __construct(
         FastConfig $fastConfig,
-        CreateInvoice $createInvoice
+        CreateInvoice $createInvoice,
+        OrderRepositoryInterface $orderRepository
     ) {
         $this->fastConfig = $fastConfig;
         $this->createInvoice = $createInvoice;
+        $this->orderRepository = $orderRepository;
     }
 
     /**
@@ -61,6 +69,7 @@ class CreateInvoiceOnShipment implements ObserverInterface
             && $order->getData('fast_order_id')
             && $order->getPayment()->getMethod() === 'fast') {
             $this->createInvoice->doInvoice($order);
+            $this->orderRepository->save($order);
         }
     }
 }

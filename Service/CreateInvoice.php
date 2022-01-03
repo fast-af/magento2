@@ -97,12 +97,12 @@ class CreateInvoice
             $this->invoiceSender->send($invoice);//Send Invoice mail to customer
 
             $history = $this->orderHistoryFactory->create()
+                ->setStatus($order->getStatus())
                 ->setEntityName(Order::ENTITY)
                 ->setComment(__('Notified customer about invoice creation #%1.', $invoice->getId()))
                 ->setIsCustomerNotified(true);
 
             $order->addStatusHistory($history);
-            $this->orderRepository->save($order);
 
         } catch (Exception $e) {
             $this->fastCheckoutHelper->log("invoice generation: FAILURE");
