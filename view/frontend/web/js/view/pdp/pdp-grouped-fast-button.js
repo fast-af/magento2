@@ -17,6 +17,7 @@ define(['fastButtonBase', 'jquery', 'ko', 'underscore'],
                 });
             },
             pdpFastClick: function(data, e) {
+                var self = this;
 
                 // get the form node via jquery
                 var productForm = $('form#product_addtocart_form');

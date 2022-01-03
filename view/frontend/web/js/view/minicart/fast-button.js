@@ -50,6 +50,8 @@ define([
         },
 
         ajaxCall: function(callback){
+            var self = this;
+
             $.ajax({
                 url: '/fast/config/fast',
                 type: 'GET',
@@ -95,7 +97,7 @@ define([
         },
 
         shouldShowFastButton: function() {
-            return self.fastConfig.shouldShowFastOnCart();
+            return this.fastConfig.shouldShowFastOnCart();
         }
     });
 });

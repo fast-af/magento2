@@ -8,10 +8,10 @@ define(['uiComponent'],
                 return fastConfigFactory();
             },
             isFastDarkTheme: function() {
-                return self.fastConfig.getBtnTheme() === 'dark';
+                return this.fastConfig.getBtnTheme() === 'dark';
             },
             shouldShowFastButton: function() {
-                return self.fastConfig.shouldShowFastOnPDP();
+                return this.fastConfig.shouldShowFastOnPDP();
             }
         });
     });
