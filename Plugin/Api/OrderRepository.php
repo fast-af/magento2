@@ -4,6 +4,8 @@ namespace Fast\Checkout\Plugin\Api;
 
 use Fast\Checkout\Model\Config\FastIntegrationConfig;
 use Fast\Checkout\Model\Payment\FastPayment;
+use Fast\Checkout\Service\CreateInvoice;
+use Magento\Payment\Model\MethodInterface;
 use Magento\Sales\Api\Data\OrderExtensionFactory;
 use Magento\Sales\Api\Data\OrderExtensionInterface;
 use Magento\Sales\Api\Data\OrderInterface;
@@ -25,19 +27,26 @@ class OrderRepository
      */
     protected $extensionFactory;
     protected $fastIntegrationConfig;
+    /**
+     * @var CreateInvoice
+     */
+    private $createInvoice;
 
     /**
      * OrderRepositoryPlugin constructor
      *
      * @param OrderExtensionFactory $extensionFactory
-     * @param FastIntegrationConfig $fastIntegrationConfigConfig
+     * @param FastIntegrationConfig $fastIntegrationConfig
+     * @param CreateInvoice $createInvoice
      */
     public function __construct(
         OrderExtensionFactory $extensionFactory,
-        FastIntegrationConfig $fastIntegrationConfig
+        FastIntegrationConfig $fastIntegrationConfig,
+        CreateInvoice $createInvoice
     ) {
         $this->extensionFactory = $extensionFactory;
         $this->fastIntegrationConfig = $fastIntegrationConfig;
+        $this->createInvoice = $createInvoice;
     }
 
     /**
@@ -102,6 +111,9 @@ class OrderRepository
             if ($resultOrder->getStatus() === FastPayment::FAST_FRAUD_SUCCESS_STATUS) {
                 $orderStatus = $this->fastIntegrationConfig->getNewAfterFraudStatus();
                 $resultOrder->setState(Order::STATE_PROCESSING)->setStatus($orderStatus);
+                if (!$this->fastIntegrationConfig->isAuthCapture()) {
+                    $this->createInvoice->doInvoice($resultOrder);
+                }
             }
         }
         //return $resultOrder;
