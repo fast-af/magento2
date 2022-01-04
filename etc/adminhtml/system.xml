@@ -128,7 +128,7 @@
                 </field>
                 <field id="set_pdp_button_width" translate="label comment" sortOrder="44" type="select" canRestore="1"
                        showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enable</label>
+                    <label>Set PDP Button Width</label>
                     <comment>Set the width of the Fast PDP button to equal the width of the Add to Cart button.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
