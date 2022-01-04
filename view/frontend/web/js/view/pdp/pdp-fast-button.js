@@ -9,6 +9,11 @@ define(['fastButtonBase', 'jquery', 'ko', 'underscore'],
                 this._super();
                 self.shouldShowFastButton = ko.observable(self.shouldShowFastButton());
                 $(document).ready(function () {
+                    if (self.fastConfig.shouldSetPdpButtonWidth()) {
+                        $("#pdp-fast-button").css({
+                            'width': ($("#product-addtocart-button").outerWidth() + 'px')
+                        });
+                    }
                     $("#pdp-fast-button").prependTo(".box-tocart .fieldset .actions");
                 });
             },
