@@ -314,7 +314,7 @@ class CheckoutButton implements ArgumentInterface
     /**
      * @return bool
      */
-    public funciton isSetPdpButtonWidth()
+    public function isSetPdpButtonWidth()
     {
         return $this->fastIntegrationConfig->isSetPdpButtonWidth();
     }
