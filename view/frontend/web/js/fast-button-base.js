@@ -1,12 +1,10 @@
-define(['uiComponent'],
-    function(Component) {
+define(['uiComponent', 'fastConfig'],
+    function(Component, fastConfigFactory) {
         'use strict';
 
         return Component.extend({
 
-            fastConfig: function() {
-                return fastConfigFactory();
-            },
+            fastConfig: fastConfigFactory(),
             isFastDarkTheme: function() {
                 return this.fastConfig.getBtnTheme() === 'dark';
             },
