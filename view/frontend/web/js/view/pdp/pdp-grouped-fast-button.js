@@ -9,6 +9,7 @@ define(['fastButtonBase', 'jquery', 'ko', 'underscore'],
                 this._super();
                 self.shouldShowFastButton = ko.observable(self.shouldShowFastButton());
                 self.fastDark = ko.observable(self.fastConfig.getBtnTheme());
+                self.fastAppId = ko.observable(self.fastConfig.getAppId());
                 $(document).ready(function () {
                     $("#pdp-fast-button").css({
                         'width': ($("#product-addtocart-button").outerWidth() + 'px')

@@ -8,6 +8,7 @@ define(['fastButtonBase', 'jquery', 'ko', 'underscore'],
                 var self = this;
                 this._super();
                 self.shouldShowFastButton = ko.observable(self.shouldShowFastButton());
+                self.fastAppId = ko.observable(self.fastConfig.getAppId());
                 $(document).ready(function () {
                     if (self.fastConfig.shouldSetPdpButtonWidth()) {
                         $("#pdp-fast-button").css({
