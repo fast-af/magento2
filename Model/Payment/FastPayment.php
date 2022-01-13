@@ -236,15 +236,14 @@ class FastPayment extends AbstractMethod
      */
     public function refund(InfoInterface $payment, $amount)
     {
-        $transactionId = $this->fastCheckoutHelper->guid() . '-' . Transaction::TYPE_REFUND;
         $parentTransactionId = $payment->getParentTransactionId();
-        $this->fastCheckoutHelper->log('transaction id in refund: ' . $transactionId, Logger::DEBUG);
+        $this->fastCheckoutHelper->log('parent transaction id in refund: ' . $parentTransactionId, Logger::DEBUG);
         $order = $payment->getOrder();
         if ($order->getFastOrderId()) {
             try {
                 $this->fastCheckoutHelper->log("in before Refund", Logger::DEBUG);
                 // send fast the refund request
-                $this->sendRefund($order, $payment, $amount, $transactionId);
+                $transactionId = $this->sendRefund($order, $payment, $amount);
             } catch (\Exception $e) {
                 $this->fastCheckoutHelper->log($e->getMessage());
                 throw new CouldNotSaveException(__('Payment refunding error.'));
@@ -312,11 +311,10 @@ class FastPayment extends AbstractMethod
      * @param $order
      * @param $payment
      * @param $amount
-     * @param $transactionId
-     * @return bool
+     * @return string
      * @throws LocalizedException
      */
-    protected function sendRefund($order, $payment, $amount, $transactionId)
+    protected function sendRefund($order, $payment, $amount)
     {
         if ($amount <= 0) {
             throw new LocalizedException(__('Invalid amount for refund.'));
@@ -326,6 +324,7 @@ class FastPayment extends AbstractMethod
             throw new LocalizedException(__('Invalid amount for refund.'));
         }
         $parentTransactionId = $payment->getParentTransactionId();
+        $transactionId = $this->fastCheckoutHelper->guid() . '-' . Transaction::TYPE_REFUND;
         if ($parentTransactionId) {
             $callback = $this->fastConfig->getFastApiUri() . static::FAST_REFUND_ENDPOINT;
             $callback = str_replace(':order_id.value', $order->getFastOrderId(), $callback);
@@ -351,7 +350,7 @@ class FastPayment extends AbstractMethod
                 );
             }
         }
-        return true;
+        return $transactionId;
     }
 
     /**
