@@ -1,5 +1,4 @@
 define([
-    'domReady!',
     'jquery',
 ], function ($) {
     var serverConfig = null;
@@ -45,6 +44,12 @@ define([
                 var isProductFast = serverConfig && serverConfig.isProductFast && serverConfig.isProductFast === true;
 
                 return isFastEnabled && isProductFast;
+            },
+            /**
+             * Check to see if the Fast button should be resized to match the width of the add to cart button.
+             */
+            shouldSetPdpButtonWidth: function() {
+                return serverConfig && serverConfig.setPdpButtonWidth && serverConfig.setPdpButtonWidth === true;
             }
         };
 

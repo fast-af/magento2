@@ -126,6 +126,12 @@
                     <label>Retry Failure Count</label>
                     <comment>number of attempts to retry failed requests - default is 5</comment>
                 </field>
+                <field id="set_pdp_button_width" translate="label comment" sortOrder="44" type="select" canRestore="1"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Set PDP Button Width</label>
+                    <comment>Set the width of the Fast PDP button to equal the width of the Add to Cart button.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
             <group id="rest_api_log" translate="label" type="text" sortOrder="200" showInDefault="1"
                    showInWebsite="0" showInStore="0">

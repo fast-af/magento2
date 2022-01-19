@@ -39,6 +39,7 @@ class FastIntegrationConfig
     const XPATH_ORDER_STATUS_PLANNED_TO_SHIP = 'fast_integration/fast/order_status_planned_to_ship';
     const XPATH_ORDER_STATUS_AFTER_FRAUD = 'fast_integration/fast/order_status_released_from_fraud';
     const XPATH_AUTO_INVOICE = 'fast_integration/fast/enable_auto_invoice';
+    const XPATH_SET_PDP_BUTTON_WIDTH = 'fast_integration/fast/set_pdp_button_width';
 
 
     /**
@@ -181,5 +182,13 @@ class FastIntegrationConfig
     public function isEnabledAutoInvoice(): bool
     {
         return $this->scopeConfig->isSetFlag(static::XPATH_AUTO_INVOICE, ScopeInterface::SCOPE_STORE);
+    }
+
+    /**
+     * @return bool
+     */
+    public function isSetPdpButtonWidth(): bool
+    {
+        return $this->scopeConfig->isSetFlag(static::XPATH_SET_PDP_BUTTON_WIDTH, ScopeInterface::SCOPE_STORE);
     }
 }

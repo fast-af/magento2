@@ -25,7 +25,8 @@ $viewModel = $block->getViewModel();
             "buttonTheme": "<?= /** @noEscape */ $viewModel->useDarkTheme() ? 'dark' : '' ?>",
             "clearCartUrl": "<?= /** @noEscape */ $viewModel->getClearCartUrl() ?>",
             "areAllProductsFast": <?= $viewModel->areAllProductsFast() ? 'true' : 'false' ?>,
-            "isProductFast": <?= $viewModel->isProductFastEnabled() ? 'true' : 'false' ?>
+            "isProductFast": <?= $viewModel->isProductFastEnabled() ? 'true' : 'false' ?>,
+            "setPdpButtonWidth": <?= $viewModel->isSetPdpButtonWidth() ? 'true' : 'false' ?>
         }
     }
 }

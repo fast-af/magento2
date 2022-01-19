@@ -1,17 +1,15 @@
-define(['uiComponent', 'jquery', 'ko', 'underscore', 'fastConfig'],
-    function(Component, $, ko, _, fastConfigFactory) {
+define(['fastButtonBase', 'jquery', 'ko', 'underscore'],
+    function(Component, $, ko, _) {
         'use strict';
-
-        var fastConfig = fastConfigFactory();
 
         return Component.extend({
 
             initialize: function() {
                 var self = this;
                 this._super();
-                self.shouldShowFastButton = ko.observable(fastConfig.shouldShowFastOnPDP());
-                self.fastDark = ko.observable(fastConfig.getBtnTheme());
-                self.fastAppId = ko.observable(fastConfig.getAppId());
+                self.shouldShowFastButton = ko.observable(self.shouldShowFastButton());
+                self.fastDark = ko.observable(self.fastConfig.getBtnTheme());
+                self.fastAppId = ko.observable(self.fastConfig.getAppId());
                 $(document).ready(function () {
                     $("#pdp-fast-button").css({
                         'width': ($("#product-addtocart-button").outerWidth() + 'px')
@@ -20,6 +18,7 @@ define(['uiComponent', 'jquery', 'ko', 'underscore', 'fastConfig'],
                 });
             },
             pdpFastClick: function(data, e) {
+                var self = this;
 
                 // get the form node via jquery
                 var productForm = $('form#product_addtocart_form');
@@ -58,18 +57,12 @@ define(['uiComponent', 'jquery', 'ko', 'underscore', 'fastConfig'],
                     }
                     // fast checkout
                     Fast.checkout({
-                        appId: fastConfig.getAppId(),
+                        appId: self.fastConfig.getAppId(),
                         buttonId: event.target.id,
                         products: productOptions
                     });
                 }
                 return true;
             },
-            isFastDarkTheme: function() {
-                return fastConfig.getBtnTheme() === 'dark';
-            },
-            shouldShowFastButton: function() {
-                return fastConfig.shouldShowFastOnPDP();
-        }
         });
     });
