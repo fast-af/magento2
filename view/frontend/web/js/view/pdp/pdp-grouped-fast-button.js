@@ -11,10 +11,8 @@ define(['fastButtonBase', 'jquery', 'ko', 'underscore'],
                 self.fastDark = ko.observable(self.fastConfig.getBtnTheme());
                 self.fastAppId = ko.observable(self.fastConfig.getAppId());
                 $(document).ready(function () {
-                    $("#pdp-fast-button").css({
-                        'width': ($("#product-addtocart-button").outerWidth() + 'px')
-                    });
-                    $("#pdp-fast-button").prependTo(".box-tocart .fieldset .actions");
+                    self.maybeSetPdpWidth();
+                    self.placePdpButton();
                 });
             },
             pdpFastClick: function(data, e) {
