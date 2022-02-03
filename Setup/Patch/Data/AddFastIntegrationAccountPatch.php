@@ -183,7 +183,7 @@ class AddFastIntegrationAccountPatch implements DataPatchInterface
                 $token->save();
 
             } catch (Exception $e) {
-                echo 'Error : ' . $e->getMessage();
+                $this->logger->error($e->getMessage());
             }
         }
     }
