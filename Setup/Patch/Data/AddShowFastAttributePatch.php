@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Fast\Checkout\Setup\Patch\Data;
 
 use Exception;
+use Fast\Checkout\Logger\Logger;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Repository;
 use Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface;
@@ -12,7 +13,6 @@ use Magento\Eav\Model\Entity\Attribute\Source\Boolean;
 use Magento\Eav\Setup\EavSetupFactory;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
-use Psr\Log\LoggerInterface;
 
 /**
  * Data patch to add show/hide fast checkout button attribute
@@ -44,7 +44,7 @@ class AddShowFastAttributePatch implements DataPatchInterface
     private $attributeRepository;
 
     /**
-     * @var LoggerInterface
+     * @var Logger
      */
     private $logger;
 
@@ -54,13 +54,13 @@ class AddShowFastAttributePatch implements DataPatchInterface
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param EavSetupFactory $eavSetupFactory
      * @param Repository $attributeRepository
-     * @param LoggerInterface $logger
+     * @param Logger $logger
      */
     public function __construct(
         ModuleDataSetupInterface $moduleDataSetup,
         EavSetupFactory $eavSetupFactory,
         Repository $attributeRepository,
-        LoggerInterface $logger
+        Logger $logger
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
         $this->eavSetupFactory = $eavSetupFactory;
