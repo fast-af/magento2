@@ -2,7 +2,7 @@
 using composer, in your magento webroot, issue the following commands: 
 
 ```
-composer require fast/module-checkout  
+composer require fast-af/module-checkout  
 php bin/magento module:enable Fast_Checkout
 php bin/magento setup:upgrade
 php bin/magento setup:di:compile
