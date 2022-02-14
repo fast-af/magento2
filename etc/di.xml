@@ -68,4 +68,16 @@
     <type name="Magento\Sales\Model\Order\Payment\State\CaptureCommand">
         <plugin name="fast_order_paid_status" type="Fast\Checkout\Plugin\Sales\Model\StatusOnCapture"/>
     </type>
+    <type name="Fast\Checkout\Model\SalesOrderGrid\OrderGridUpdater">
+        <arguments>
+            <argument name="entityGrid" xsi:type="object">Magento\Sales\Model\ResourceModel\Order\Grid</argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="fast_order_id" xsi:type="string">sales_order.fast_order_id</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

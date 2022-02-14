@@ -6,5 +6,11 @@
         <plugin name="send_cancel_to_fast"
                 type="Fast\Checkout\Plugin\Sales\Model\OrderPlugin"/>
     </type>
+    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Grid" type="Magento\Sales\Model\ResourceModel\Grid">
+        <arguments>
+            <argument name="columns" xsi:type="array">
+                <item name="fast_order_id" xsi:type="string">sales_order.fast_order_id</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>
-
