@@ -1,7 +1,7 @@
 {
   "name": "fastaf/module-checkout",
   "description": "Magento Fast Checkout Extension - A Checkout and Payment solution for Magento using the Fast checkout interface",
-  "version": "1.1.0.7",
+  "version": "1.1.2",
   "minimum-stability": "stable",
   "type": "magento2-module",
   "license": [
