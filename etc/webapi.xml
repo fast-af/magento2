@@ -37,4 +37,16 @@
             <resource ref="Fast_Checkout::DoRequestLog_delete"/>
         </resources>
     </route>
+    <route url="/V1/fast-checkout/product/:productId" method="GET">
+        <service class="Fast\Checkout\Api\GetProductRepositoryInterface" method="get"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
+    <route url="/V1/fast-checkout/product" method="POST">
+        <service class="Fast\Checkout\Api\GetProductRepositoryInterface" method="getByPostFields"/>
+        <resources>
+            <resource ref="Magento_Catalog::products" />
+        </resources>
+    </route>
 </routes>

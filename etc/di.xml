@@ -68,4 +68,6 @@
     <type name="Magento\Sales\Model\Order\Payment\State\CaptureCommand">
         <plugin name="fast_order_paid_status" type="Fast\Checkout\Plugin\Sales\Model\StatusOnCapture"/>
     </type>
+    <preference for="Fast\Checkout\Api\GetProductRepositoryInterface"
+                type="Fast\Checkout\Model\GetProductRepository"/>
 </config>
