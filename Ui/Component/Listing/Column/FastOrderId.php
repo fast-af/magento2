@@ -3,7 +3,6 @@
 namespace Fast\Checkout\Ui\Component\Listing\Column;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -26,7 +25,6 @@ class FastOrderId extends Column
 
     /**
      * FastOrderId constructor.
-     * @param PriceCurrencyInterface $priceCurrency
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param OrderRepositoryInterface $orderRepository
@@ -35,7 +33,6 @@ class FastOrderId extends Column
      * @param array $data
      */
     public function __construct(
-        PriceCurrencyInterface $priceCurrency,
         ContextInterface $context,
         UiComponentFactory $uiComponentFactory,
         OrderRepositoryInterface $orderRepository,
@@ -46,7 +43,6 @@ class FastOrderId extends Column
         $this->_orderRepository = $orderRepository;
         $this->_searchCriteria = $criteria;
 
-        $this->priceCurrency = $priceCurrency;
         parent::__construct($context, $uiComponentFactory, $components, $data);
     }
 

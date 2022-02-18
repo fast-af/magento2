@@ -98,8 +98,8 @@ class DoRequest
     public function execute(
         string $requestUri,
         array $body = [],
-        string $requestMethod = 'POST',
-        int $doRequestLogId = 0
+        $requestMethod = 'POST',
+        $doRequestLogId = 0
     ): DoRequestLogInterface {
         $this->fastCheckoutHelper->log("in DoRequest request method: " . $requestMethod, Logger::DEBUG);
 

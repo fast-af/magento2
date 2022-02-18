@@ -25,6 +25,7 @@
     <event name="checkout_submit_all_after">
         <observer name="guest_to_customer" instance="Fast\Checkout\Observer\UpdateGuestOrderWithCustomerData"/>
         <observer name="invoice_fast_orders" instance="Fast\Checkout\Observer\InvoiceFastOrderWithCapture"/>
+        <observer name="update_grid" instance="Fast\Checkout\Observer\UpdateSalesOrderGrid"/>
     </event>
     <event name="sales_order_shipment_save_before">
         <observer name="fast_order_item_uuid_to_ship_item" instance="Fast\Checkout\Observer\BeforeShipment"/>
