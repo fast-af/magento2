@@ -6,7 +6,7 @@
  *
  * @package   Fast_Checkout
  * @author    Fast <hi@fast.co>
- * @copyright 2021 Copyright Fast AF, Inc., https://www.fast.co/
+ * @copyright 2022 Copyright Fast AF, Inc., https://www.fast.co/
  * @license   https://opensource.org/licenses/OSL-3.0 OSL-3.0
  * @link      https://www.fast.co/
  */
@@ -30,7 +30,6 @@ class GetProductRepository implements GetProductRepositoryInterface
      * @var Logger
      */
     private $logger;
-
 
     /**
      * @param ProductRepositoryInterface $productRepository
@@ -57,7 +56,6 @@ class GetProductRepository implements GetProductRepositoryInterface
         $this->logger->addInfo("CustomAPI ProductRequest: ID => {$productId}");
         return $this->productRepository->getById($productId, false, $storeId, $forceReload);
     }
-
 
     /**
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
