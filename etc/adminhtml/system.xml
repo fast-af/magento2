@@ -135,6 +135,7 @@
                 <field id="shipping_restrictions" translate="label comment" sortOrder="50" type="multiselect"
                        showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Shipping Restrictions</label>
+                    <can_be_empty>1</can_be_empty>
                     <tooltip>Select Shipping Carriers you want to block from Fast Checkout.</tooltip>
                     <source_model>Fast\Checkout\Model\Config\Adminhtml\Source\ShippingMethods</source_model>
                 </field>

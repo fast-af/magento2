@@ -71,27 +71,28 @@ class UpdatePathInfo
      */
     public function beforeDispatch(Rest $subject, RequestInterface $request)
     {
-        if ($this->request->getHeader('x-fast-updatepathinfo') === "true" && $this->fastIntegrationConfig->isEnabled()) {
+        if ($this->request->getHeader('x-fast-usefastendpoint') === "true" && $this->fastIntegrationConfig->isEnabled()) {
             $pathInfo = $this->request->getPathInfo();
-            $this->logger->info("Initiate redirect. {$pathInfo}");
+            $this->logger->debug("Initiate redirect. {$pathInfo}");
             $redirectPath = null;
 
             //look for x-fast custom header and get new redirect endpoint.
-            if (preg_match('/(?<=\/V1\/)[^\/]*(?=\/)/', $pathInfo, $matches) === 1 && sizeof($matches) > 0) {
-                $redirectPath = preg_replace('/(?<=\/V1\/)[^\/]*(?=\/)/', 'fast-checkout/' . $matches[0], $pathInfo);
+            $regex = '/(?<=\/V1\/)[^\/]*(?=\/)/';
+            if (preg_match($regex, $pathInfo, $matches) === 1 && sizeof($matches) > 0) {
+                $redirectPath = preg_replace($regex, 'fast-checkout/' . $matches[0], $pathInfo);
             }
 
             if ($redirectPath) {
                 try {
                     $this->request->setPathInfo($redirectPath);
                     $this->router->match($this->request);
-                    $this->logger->info("Redirecting path from: {$pathInfo} -> {$redirectPath}");
+                    $this->logger->debug("Redirecting path from: {$pathInfo} -> {$redirectPath}");
                     $redirectPath = '/rest' . $redirectPath;
-                    $this->logger->info("Executing: {$redirectPath}");
+                    $this->logger->debug("Executing: {$redirectPath}");
                     $request->setPathInfo($redirectPath);
                 } catch (\Exception $e) {
-                    $this->logger->error($e->getMessage());
-                    $this->logger->error("Redirect path doesn't exist. Rolling back from: {$redirectPath} -> {$pathInfo}");
+                    $this->logger->debug($e->getMessage());
+                    $this->logger->debug("Redirect path doesn't exist. Rolling back from: {$redirectPath} -> {$pathInfo}");
                     $this->request->setPathInfo($pathInfo);
                 }
             }

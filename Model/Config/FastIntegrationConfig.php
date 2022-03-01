@@ -194,9 +194,9 @@ class FastIntegrationConfig
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getShippingRestrictions(): string
+    public function getShippingRestrictions(): ?string
     {
         return $this->scopeConfig->getValue(static::XPATH_FAST_SHIPPING_RESTRICTIONS, ScopeInterface::SCOPE_STORE);
     }

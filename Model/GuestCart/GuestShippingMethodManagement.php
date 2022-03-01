@@ -63,14 +63,17 @@ class GuestShippingMethodManagement implements GuestShipmentEstimationInterface
     public function estimateByExtendedAddress($cartId, AddressInterface $address): array
     {
         $fastShippingMethods = [];
-        $restrictions = array_filter(explode(',', $this->fastIntegrationConfig->getShippingRestrictions()));
         $shippingMethods = $this->guestShipmentEstimation->estimateByExtendedAddress($cartId, $address);
+        $configImplodeString = $this->fastIntegrationConfig->getShippingRestrictions();
 
-        if (count($restrictions) > 0) {
-            foreach ($shippingMethods as $method) {
-                if (!in_array($method->getCarrierCode(), $restrictions)) {
-                    $fastShippingMethods[] = $method;
-                }
+        if (!$configImplodeString) {
+            return $shippingMethods;
+        }
+
+        $restrictions = array_filter(explode(',', $configImplodeString));
+        foreach ($shippingMethods as $method) {
+            if (!in_array($method->getCarrierCode(), $restrictions)) {
+                $fastShippingMethods[] = $method;
             }
         }
 
