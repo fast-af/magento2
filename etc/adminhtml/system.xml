@@ -132,6 +132,12 @@
                     <label>Fast PROD API URI</label>
                     <comment>with trailing slash</comment>
                 </field>
+                <field id="shipping_restrictions" translate="label comment" sortOrder="50" type="multiselect"
+                       showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Shipping Restrictions</label>
+                    <tooltip>Select Shipping Carriers you want to block from Fast Checkout.</tooltip>
+                    <source_model>Fast\Checkout\Model\Config\Adminhtml\Source\ShippingMethods</source_model>
+                </field>
             </group>
             <group id="rest_api_log" translate="label" type="text" sortOrder="200" showInDefault="1"
                    showInWebsite="0" showInStore="0">

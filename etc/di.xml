@@ -26,7 +26,8 @@
     <preference for="Fast\Checkout\Api\Data\RestApiLogSearchResultsInterface"
                 type="Fast\Checkout\Model\RestApiLogSearchResults"/>
     <type name="Magento\Webapi\Controller\Rest">
-        <plugin name="rest-api-log" type="Fast\Checkout\Plugin\RestApiLog"/>
+        <plugin name="a-update-path-info" type="Fast\Checkout\Plugin\Controller\Rest\UpdatePathInfo" disabled="false"/>
+        <plugin name="b-rest-api-log" type="Fast\Checkout\Plugin\RestApiLog"/>
     </type>
     <preference for="Fast\Checkout\Api\DoRequestLogRepositoryInterface"
                 type="Fast\Checkout\Model\DoRequestLogRepository"/>
@@ -80,4 +81,6 @@
             </argument>
         </arguments>
     </virtualType>
+    <preference for="Fast\Checkout\Api\GuestShipmentEstimationInterface"
+                type="Fast\Checkout\Model\GuestCart\GuestShippingMethodManagement"/>
 </config>

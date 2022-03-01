@@ -37,4 +37,10 @@
             <resource ref="Fast_Checkout::DoRequestLog_delete"/>
         </resources>
     </route>
+    <route url="/V1/fast-checkout/guest-carts/:cartId/estimate-shipping-methods" method="POST">
+        <service class="Fast\Checkout\Api\GuestShipmentEstimationInterface" method="estimateByExtendedAddress"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
 </routes>

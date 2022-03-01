@@ -40,6 +40,7 @@ class FastIntegrationConfig
     const XPATH_ORDER_STATUS_AFTER_FRAUD = 'fast_integration/fast/order_status_released_from_fraud';
     const XPATH_AUTO_INVOICE = 'fast_integration/fast/enable_auto_invoice';
     const XPATH_SET_PDP_BUTTON_WIDTH = 'fast_integration/fast/set_pdp_button_width';
+    const XPATH_FAST_SHIPPING_RESTRICTIONS = 'fast_integration/fast/shipping_restrictions';
 
 
     /**
@@ -190,5 +191,13 @@ class FastIntegrationConfig
     public function isSetPdpButtonWidth(): bool
     {
         return $this->scopeConfig->isSetFlag(static::XPATH_SET_PDP_BUTTON_WIDTH, ScopeInterface::SCOPE_STORE);
+    }
+
+    /**
+     * @return string
+     */
+    public function getShippingRestrictions(): string
+    {
+        return $this->scopeConfig->getValue(static::XPATH_FAST_SHIPPING_RESTRICTIONS, ScopeInterface::SCOPE_STORE);
     }
 }
