@@ -114,12 +114,13 @@ class FastIntegrationConfig
     }
 
     /**
+     * @param null $scopeCode
      * @return string
      */
-    public function getAppId(): string
+    public function getAppId($scopeCode = null): string
     {
-        $value = $this->scopeConfig->getValue(static::XPATH_APP_ID, ScopeInterface::SCOPE_STORE);
-        return isset($value) ? $value : 'not set';
+        $value = $this->scopeConfig->getValue(static::XPATH_APP_ID, ScopeInterface::SCOPE_STORE, $scopeCode);
+        return $value ?? 'not set';
     }
 
     /**
