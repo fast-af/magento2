@@ -116,12 +116,24 @@ class Send extends Action
         $consumer = $this->oauthService->loadConsumer($fastIntegration["consumer_id"]);
         $token = $this->oauthToken->loadByConsumerIdAndUserType($consumer->getId(), 1)->getToken();
         $callback = $this->fastConfig->getFastApiUri().'auth-integration/magento';
+
+        $message = '';
+        $store = $this->storeManagerInterface->getStore(); //Default scope
+        if ($websiteId = $this->getRequest()->getParam('website')) {
+            $website = $this->storeManagerInterface->getWebsite($websiteId);
+            $store = $website->getDefaultStore(); //Website scope
+        }
+        if ($storeId = $this->getRequest()->getParam('store')) {
+            $store = $this->storeManagerInterface->getStore($storeId); //Store scope
+        }
+        $storeName = $store->getName();
         $payload = [
-            'app_id' => $this->fastConfig->getAppId(),
-            'merchant_api_url' => $this->storeManagerInterface->getStore()->getBaseUrl(),
+            'app_id' => $this->fastConfig->getAppId($store->getCode()),
+            'merchant_api_url' => $store->getBaseUrl(),
             'access_token' => $token,
-            'site_id' => $this->storeManagerInterface->getStore()->getId()
+            'site_id' => $store->getId()
         ];
+
         // Send key and display results
         $valid = 0;
         $responsePrefix = 'sending activation ';
@@ -131,10 +143,12 @@ class Send extends Action
             $responseText = $responsePrefix . 'success';
         }
         $this->logger->debug('response valid: ' . $valid . ' ' . $responseText);
+        $message .= __("Successfully activated on {$storeName} [store view]");
         $resultJson = $this->resultJsonFactory->create();
         $data = [
             'valid' => $valid,
-            'responseText' => $responseText
+            'responseText' => $responseText,
+            'message' => $message
         ];
         $resultJson->setData($data);
 

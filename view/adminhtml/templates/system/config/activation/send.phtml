@@ -34,6 +34,9 @@ declare(strict_types=1);
                             activationMessage.removeClassName('hidden').removeClassName('admin__field-error').addClassName('note');
                             activationMessage.setStyle({color: 'green'});
                             result = 'Activation Success';
+                            if (response.hasOwnProperty('message') && response.message.length) {
+                                result = response.message;
+                            }
                         } else {
                             activationMessage.removeClassName('hidden').addClassName('admin__field-error');
                         }
