@@ -95,8 +95,8 @@ class AddShowFastAttributePatch implements DataPatchInterface
             'used_in_product_listing' => true,
             'visible_on_front' => true,
             'user_defined' => false,
-            'filterable' => true,
-            'filterable_in_search' => true,
+            'filterable' => false,
+            'filterable_in_search' => false,
             'used_for_promo_rules' => true,
             'is_html_allowed_on_front' => true,
             'used_for_sort_by' => false
