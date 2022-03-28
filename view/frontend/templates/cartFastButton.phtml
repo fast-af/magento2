@@ -35,8 +35,8 @@ if ($viewModel->isFastEnabled() && $viewModel->areAllProductsFast()) : ?>
         var theme = 'dark';
         var cartId = 'notset';
         var appId = 'notset';
-         $.ajax({
-            url: '/fast/config/fast',
+        $.ajax({
+            url: '<?= $viewModel->getFastConfigUrl(); ?>',
             type: 'GET',
             dataType: 'json'
         }).then(function (data) {

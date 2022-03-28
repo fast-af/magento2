@@ -318,4 +318,14 @@ class CheckoutButton implements ArgumentInterface
     {
         return $this->fastIntegrationConfig->isSetPdpButtonWidth();
     }
+
+    /**
+     * @return string
+     */
+    public function getFastConfigUrl(): string
+    {
+        return $this->urlInterface->getUrl(
+            'fast/config/fast'
+        );
+    }
 }

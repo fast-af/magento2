@@ -30,6 +30,9 @@
                                             <item name="config" xsi:type="array">
                                                 <item name="template"
                                                       xsi:type="string">Fast_Checkout/minicart/fast-button</item>
+                                                <item name="configUrl" xsi:type="url" path="fast/config/fast">
+                                                    fast/config/fast
+                                                </item>
                                             </item>
                                         </item>
                                     </item>
