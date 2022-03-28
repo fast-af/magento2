@@ -51,9 +51,13 @@ define([
 
         ajaxCall: function(callback){
             var self = this;
+            let url = '/fast/config/fast';
+            if (self.hasOwnProperty('configUrl') && self.configUrl){
+                url = self.configUrl;
+            }
 
             $.ajax({
-                url: '/fast/config/fast',
+                url: url,
                 type: 'GET',
                 dataType: 'json'
             }).done(function(data){
