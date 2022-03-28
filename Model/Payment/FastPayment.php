@@ -419,6 +419,11 @@ class FastPayment extends AbstractMethod
             $storeId = $this->getStore();
         }
         $path = 'fast_integration/fast/' . $field;
+
+        if ('title' === $field) {
+            $path = 'payment/' . $this->getCode() . '/' . $field;
+        }
+
         return $this->_scopeConfig->getValue($path, \Magento\Store\Model\ScopeInterface::SCOPE_STORE, $storeId);
     }
 }
