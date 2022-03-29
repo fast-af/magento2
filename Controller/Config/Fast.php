@@ -100,54 +100,82 @@ class Fast extends Action
      */
     public function execute()
     {
-        $quote = $this->checkoutSession->getQuote();
-        $cartId = $this->getInvisibleCartFromCart($quote);
         $result = $this->resultJsonFactory->create();
-        $cartIsFast = true;
-        foreach ($quote ->getAllVisibleItems() as $cartItem) {
-            if ((int)$cartItem->getProduct()->getData('hide_fast_option') == 0) {
-                $cartIsFast = false;
+        $isFastEnabled = $this->fastConfig->isEnabled();
+        $appId = $isFastEnabled ? $this->fastConfig->getAppId() : '';
+        $theme = $isFastEnabled && $this->fastConfig->useDarkTheme() ? 'dark' : '';
+
+        $data = [
+            'areAllProductsFast' => false,
+            'success' => false,
+            'appId' => $appId,
+            'cartId' => '',
+            'theme' => $theme
+        ];
+
+        try {
+            $quote = $this->checkoutSession->getQuote();
+            $cartId = $this->getInvisibleCartFromCart($quote);
+            $data['cartId'] = $cartId;
+
+            if(!$quote || !$quote->getId()){
+                return $result->setData($data);
             }
-            if ($cartItem->getProductType() === 'bundle' ||
-                $cartItem->getProductType() === 'downloadable') {
-                $cartIsFast = false;
+
+            $cartIsFast = true;
+            foreach ($quote->getAllVisibleItems() as $cartItem) {
+                if ((int)$cartItem->getProduct()->getData('hide_fast_option') == 0) {
+                    $cartIsFast = false;
+                }
+                if ($cartItem->getProductType() === 'bundle' ||
+                    $cartItem->getProductType() === 'downloadable') {
+                    $cartIsFast = false;
+                }
             }
+            $data['areAllProductsFast'] = $cartIsFast;
+        } catch (\Exception $exception) {
+            $this->fastCheckoutHelper->log('No quote found.');
         }
-        return $result->setData([
-            'areAllProductsFast' => $cartIsFast,
-            'success' => true,
-            'appId' => $this->fastConfig->getAppId(),
-            'cartId' => $cartId,
-            'theme' => $this->fastConfig->useDarkTheme() ? 'dark' : ''
-        ]);
+
+        $data['success'] = true;
+        return $result->setData($data);
     }
 
-    public function getInvisibleCartFromCart(Quote $quote): string
+    /**
+     * Get Invisible cart
+     *
+     * @param Quote|null $quote
+     * @return string - cartId
+     *
+     */
+    public function getInvisibleCartFromCart(?Quote $quote): string
     {
         //Get cart from cart ID
-        /** @var Quote $currentCart */
-        $currentCart = $this->quoteRepository->get($quote->getEntityId());
         $maskedId = $this->cartManagement->createEmptyCart();
         $this->fastCheckoutHelper->log($maskedId);
         $newCartId = $this->maskedQuoteIdToQuoteId->execute($maskedId);
         /** @var Quote $newCart */
         $newCart = $this->quoteFactory->create()->load($newCartId, 'entity_id');
-        //$newCart->setData($currentCart->getData());
         $newCart->setActive(0);
-        $newCart->setCouponCode($currentCart->getCouponCode());
-        //$newCart->removeAllItems();
-        foreach ($currentCart->getAllVisibleItems() as $item) {
-            $this->fastCheckoutHelper->log('item ' . $item->getName());
-            $newItem = clone $item;
-            $newCart->addItem($newItem);
-            if ($item->getHasChildren()) {
-                foreach ($item->getChildren() as $child) {
-                    $newChild = clone $child;
-                    $newChild->setParentItem($newItem);
-                    $newCart->addItem($newChild);
+
+        if ($quote && $quote->getId()) {
+            /** @var Quote $currentCart */
+            $currentCart = $this->quoteRepository->get($quote->getEntityId());
+            $newCart->setCouponCode($currentCart->getCouponCode());
+            foreach ($currentCart->getAllVisibleItems() as $item) {
+                $this->fastCheckoutHelper->log('item ' . $item->getName());
+                $newItem = clone $item;
+                $newCart->addItem($newItem);
+                if ($item->getHasChildren()) {
+                    foreach ($item->getChildren() as $child) {
+                        $newChild = clone $child;
+                        $newChild->setParentItem($newItem);
+                        $newCart->addItem($newChild);
+                    }
                 }
             }
         }
+
         /**
          * Init shipping and billing address if quote is new
          */
