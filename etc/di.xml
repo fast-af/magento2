@@ -80,4 +80,11 @@
             </argument>
         </arguments>
     </virtualType>
+
+    <type name="Magento\QuoteGraphQl\Model\Resolver\CreateEmptyCart">
+        <plugin name="save_fast_order_id_to_cart_gql" type="Fast\Checkout\Plugin\Resolver\CreateEmptyCartWithFastOrderId"/>
+    </type>
+    <type name="Magento\QuoteGraphQl\Model\Resolver\AddProductsToCart">
+        <plugin name="save_fast_item_uuid_cart_item_gql" type="Fast\Checkout\Plugin\Resolver\AddProductsToCartWithFastItemUuid"/>
+    </type>
 </config>

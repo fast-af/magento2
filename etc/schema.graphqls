@@ -1,0 +1,16 @@
+
+type Cart {
+    fast_order_id: String @resolver(class: "\\Fast\\Checkout\\Model\\Resolver\\Cart\\FastOrderId")
+}
+
+interface CartItemInterface {
+    fast_order_item_uuid: String @resolver(class: "\\Fast\\Checkout\\Model\\Resolver\\CartItem\\FastOrderItemUuid")
+}
+
+input createEmptyCartInput {
+    fast_order_id: String
+}
+
+input CartItemInput {
+    fast_order_item_uuid: String
+}
